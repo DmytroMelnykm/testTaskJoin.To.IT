@@ -28,6 +28,24 @@ class EventViewSet(ModelViewSet):
             return EventGetSerializer
         return EventCreateSerializer
 
+    def perform_destroy(self, instance):
+        title_event = instance.title
+        all_message_for_delete = [
+            (
+                f"Invite to {title_event}", 
+                settings.MAIN_BODY_LIST_ACCEPT.format(
+                    username=object_user.invited.username,
+                    title_event=title_event,
+                ),
+                settings.EMAIL_HOST_USER,
+                [object_user.invited.email]
+            )
+            for object_user in UserInvited.objects.filter(id_event=instance.id)
+        ]
+        super().perform_destroy(instance)
+
+        send_mass_mail(all_message_for_delete)
+
 
 class UserInvitedViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -55,9 +73,22 @@ class UserInvitedViewSet(ModelViewSet):
                     title_event=title_event,
                 ),
                 from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[info_invite.invited.username]
+                recipient_list=[info_invite.invited.email]
             )
     
+    def perform_destroy(self, instance):
+        title = instance.event.title
+        username = instance.invited.username
+        email = instance.invited.email
 
+        super().perform_destroy(instance)
 
-
+        send_mail(
+            subject=f"Invite to {title}",
+            message=settings.MAIN_BODY_LIST_DROP_HUMAN.format(
+                username=username,
+                title_event=title,
+            ),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email]
+            )

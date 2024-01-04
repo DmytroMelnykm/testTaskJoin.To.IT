@@ -27,10 +27,10 @@ load_dotenv(BASE_DIR.parent.joinpath('.env'))
 SECRET_KEY = environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(environ.get('DEBUG')))
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost', environ.get('DOMAIN')
 ]
 
 
@@ -96,10 +96,10 @@ WSGI_APPLICATION = 'service.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": environ.get("NAME"),
-        "USER": environ.get("USER_DB"),
+        "NAME": environ.get("DB_NAME"),
+        "USER": environ.get("DB_USER"),
         "PASSWORD": environ.get("PASSWORD_DB"),
-        "HOST": environ.get("HOST","127.0.0.1"),
+        "HOST": environ.get("DB_HOST","127.0.0.1"),
         "PORT": "5432",
     }
 }
@@ -149,8 +149,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'dmytro.melnyk.it@gmail.com'
-EMAIL_HOST_PASSWORD = 'ctbxioowsxtxfvcs'
+EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True

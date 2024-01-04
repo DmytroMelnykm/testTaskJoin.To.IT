@@ -6,8 +6,13 @@ services:
     environment:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
-      PASSWORD: /run/secrets/database_password
-      SECRET_KEY: /run/secrets/django_secret
+      PASSWORD: ${DB_USER}
+      SECRET_KEY: ${DB_USER}
+      DEBUG: ${DEBUG}
+      HOST: ${DB_HOST}
+      DOMAIN: ${DOMAIN}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     secrets:
       - database_password
       - django_secret_key
@@ -22,22 +27,14 @@ services:
     image: postgres:alpine
     environment:
       POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: /run/secrets/database_password
-    secrets:
-      - database_password
+      POSTGRES_USER: ${USER_DB}
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
     ports:
       - "5432:5432"
     networks:
       - custom-network
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-secrets:                        # top level secrets block
-  database_password:
-    external: true
-  django_secret_key:
-    external: true
 
 networks:
   custom-network:
