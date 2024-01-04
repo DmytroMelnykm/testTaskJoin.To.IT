@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "event_app.apps.EventAppConfig",
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -58,6 +61,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'service.urls'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 TEMPLATES = [
     {
@@ -133,3 +145,24 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'dmytro.melnyk.it@gmail.com'
+EMAIL_HOST_PASSWORD = 'ctbxioowsxtxfvcs'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+
+MAIN_BODY_LIST_ACCEPT = """
+### Dear user {username}
+### Welcomme {title_event}
+"""
+
+
+MAIN_BODY_LIST_DROP_HUMAN = """
+### Dear user {username} Goodbye
+### {title_event}
+"""

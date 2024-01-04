@@ -1,26 +1,39 @@
-from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
+from rest_framework.serializers import ModelSerializer
 from .models import Event, UserInvited
 from django.contrib.auth import get_user_model
 
 
-class UserEventSerializer(ModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email']
+        fields = ['id', 'username', 'email']
 
 
-class EventSerializer(ModelSerializer):
-    organizer = UserEventSerializer()
+class EventGetSerializer(ModelSerializer):
+    organizer = UserSerializer()
 
     class Meta:
         model = Event
         fields = '__all__'
 
 
-class UserInvitedSerializer(ModelSerializer):
-    event = PrimaryKeyRelatedField(queryset=Event.objects.all())
-    invited = PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), many=True)
+class EventCreateSerializer(ModelSerializer):
 
+    class Meta:
+        model = Event
+        fields = '__all__'
+
+
+class UserInvitedGetSerializer(ModelSerializer):
+    event = EventGetSerializer()
+    invited = UserSerializer()
+
+    class Meta:
+        model = UserInvited
+        fields = '__all__'
+    
+
+class UserInvitedCreateSerializer(ModelSerializer):
 
     class Meta:
         model = UserInvited

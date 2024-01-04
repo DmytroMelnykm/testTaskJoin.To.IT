@@ -15,4 +15,7 @@ class Event(models.Model):
 
 class UserInvited(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    invited = models.ManyToManyField(get_user_model())
+    invited = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ["event", "invited"]
