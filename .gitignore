@@ -138,3 +138,5 @@ GitHub.sublime-settings
 .history
 
 docker-compose.yml
+
+postgres_password.txt

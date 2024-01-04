@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "event_app.apps.EventAppConfig",
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -83,8 +85,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": environ.get("NAME"),
-        "USER": environ.get("USER"),
-        "PASSWORD": environ.get("PASSWORD"),
+        "USER": environ.get("USER_DB"),
+        "PASSWORD": environ.get("PASSWORD_DB"),
         "HOST": environ.get("HOST","127.0.0.1"),
         "PORT": "5432",
     }
