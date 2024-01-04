@@ -136,3 +136,7 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+docker-compose.yml
+
+postgres_password.txt

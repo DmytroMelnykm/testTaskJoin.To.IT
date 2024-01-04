@@ -1,0 +1,44 @@
+services:
+  service:
+    build: 
+      context: .
+      dockerfile: Django.Dockerfile
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      PASSWORD: ${DB_USER}
+      SECRET_KEY: ${DB_USER}
+      DEBUG: ${DEBUG}
+      HOST: ${DB_HOST}
+      DOMAIN: ${DOMAIN}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+    secrets:
+      - database_password
+      - django_secret_key
+    networks:
+      - custom-network
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+  
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${USER_DB}
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
+    ports:
+      - "5432:5432"
+    networks:
+      - custom-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  custom-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
